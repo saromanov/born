@@ -13,5 +13,5 @@ func (c *client) createBuild(b *structs.Build) error {
 		return fmt.Errorf("unable to create build: %v", err)
 	}
 
-	return build
+	return nil
 }
