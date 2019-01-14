@@ -7,3 +7,8 @@ import "net/http"
 func Health(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
+
+// Setup Provides setup of the server
+func Setup(addr string) {
+
+}
