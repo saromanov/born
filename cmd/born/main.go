@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"os"
 
 	githubl "github.com/google/go-github/github"
@@ -9,6 +10,8 @@ import (
 	"github.com/saromanov/born/provider/github"
 	"github.com/urfave/cli"
 	"golang.org/x/oauth2"
+	"github.com/saromanov/born/store"
+	"github.com/saromanov/born/store/postgresql"
 )
 
 var flags = []cli.Flag{
@@ -21,6 +24,16 @@ var flags = []cli.Flag{
 		EnvVar: "BORN_SERVER",
 		Name:   "born-server",
 		Usage:  "server of the born",
+	},
+	cli.StringFlag{
+		EnvVar: "DB_USERNAME",
+		Name:   "db-username",
+		Usage:  "databse username",
+	},
+	cli.StringFlag{
+		EnvVar: "DB_PASSWORD",
+		Name:   "db-password",
+		Usage:  "databse password",
 	},
 }
 
@@ -39,11 +52,14 @@ func setupProvider(c *cli.Context) (provider.Provider, error) {
 	})
 }
 
+
+
 func run(c *cli.Context) {
-	_, err := setupProvider(c)
+	provider, err := setupProvider(c)
 	if err != nil {
 		panic(err)
 	}
+	fmt.Println(provider)
 }
 
 func main() {
