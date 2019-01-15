@@ -12,15 +12,15 @@ type client struct {
 }
 
 // New creates new init of the Postgresql
-func New(opt *store.Options) store.Store {
-	db, err := gorm.Open("postgres", fmt.Sprintf("user=%s password=%s"))
+func New(opt *store.Options) (store.Store, error) {
+	db, err := gorm.Open("postgres", fmt.Sprintf("user=%s password=%s", opt.Username, opt.Password))
 	if err != nil {
-		panic("failed to connect database")
+		return nil, fmt.Errorf("failed to connect database: %v", err)
 	}
 
 	return client{
 		db: db,
-	}
+	}, nil
 }
 
 // Close provides closing of db
