@@ -10,5 +10,6 @@ func Health(w http.ResponseWriter, r *http.Request) {
 
 // Setup Provides setup of the server
 func Setup(addr string) {
-
+	http.HandleFunc("/health", Health)
+	log.Fatal(http.ListenAndServe(addr, nil))
 }
