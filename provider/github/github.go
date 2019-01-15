@@ -2,8 +2,8 @@ package github
 
 import (
 	"context"
+	"errors"
 	"fmt"
-	"error"
 
 	"github.com/google/go-github/github"
 	"github.com/saromanov/born/provider"
