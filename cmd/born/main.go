@@ -2,8 +2,9 @@ package main
 
 import (
 	"context"
+	"os"
 
-	"github.com/google/go-github/github"
+	githubl "github.com/google/go-github/github"
 	"github.com/saromanov/born/provider"
 	"github.com/saromanov/born/provider/github"
 	"github.com/urfave/cli"
@@ -32,8 +33,24 @@ func setupProvider(c *cli.Context) (provider.Provider, error) {
 		&oauth2.Token{AccessToken: token},
 	)
 	tc := oauth2.NewClient(ctx, sts)
-	client := github.NewClient(tc)
+	client := githubl.NewClient(tc)
 	return github.New(github.Options{
-		Client: client
+		Client: client,
 	})
+}
+
+func run(c *cli.Context) {
+	_, err := setupProvider(c)
+	if err != nil {
+		panic(err)
+	}
+}
+
+func main() {
+	app := cli.NewApp()
+	app.Name = "born"
+	app.Action = run
+	if err := app.Run(os.Args); err != nil {
+		panic(err)
+	}
 }

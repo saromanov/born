@@ -34,7 +34,7 @@ func New(opt Options) (provider.Provider, error) {
 }
 
 // Teams returns list of the teams for Github account
-func (c *client) Teams(u *structs.User) ([]*structs.Team, error) {
+func (c client) Teams(u *structs.User) ([]*structs.Team, error) {
 	client := c.client.Client()
 
 	opts := &github.ListOptions{
@@ -54,13 +54,13 @@ func (c *client) Teams(u *structs.User) ([]*structs.Team, error) {
 }
 
 // Repo returns specified repo
-func (c *client) Repo(u *structs.User, id int64) (*structs.Repo, error) {
+func (c client) Repo(u *structs.User, id int64) (*structs.Repo, error) {
 	client := c.client.Client()
-	repo, resp, err := client.Repositories.GetByID(context.Background(), id)
+	repo, _, err := client.Repositories.GetByID(context.Background(), id)
 	if err != nil {
 		return nil, err
 	}
-	return toRepo(u), nil
+	return toRepo(repo), nil
 }
 
 // toTeamList provides converting from github representation
@@ -82,7 +82,7 @@ func toTeamList(lst []*github.Organization) []*structs.Team {
 func toRepo(r *github.Repository) *structs.Repo {
 	return &structs.Repo{
 		ID:       *r.ID,
-		Owner:    *r.Owner,
+		Owner:    fmt.Sprintf("%d", *r.Owner.ID),
 		Name:     *r.Name,
 		FullName: *r.FullName,
 		CloneURL: *r.CloneURL,
