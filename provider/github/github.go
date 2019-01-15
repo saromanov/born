@@ -37,7 +37,7 @@ func New(opt Options) (provider.Provider, error) {
 func (c *client) Teams(u *structs.User) ([]*structs.Team, error) {
 	client := c.client.Client()
 
-	opts := github.ListOptions{
+	opts := &github.ListOptions{
 		Page: 1,
 	}
 
@@ -51,6 +51,15 @@ func (c *client) Teams(u *structs.User) ([]*structs.Team, error) {
 		opts.Page = resp.NextPage
 	}
 	return teams, nil
+}
+
+// Repo returns specified repo
+func (c *client) Repo(u *structs.User, id int64) (*structs.Repo, error) {
+	client := c.client.Client()
+	repo, resp, err := client.Repositories.GetByID(context.Background(), id)
+	if err != nil {
+		return nil, err
+	}
 }
 
 // toTeamList provides converting from github representation
