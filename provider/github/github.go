@@ -3,12 +3,15 @@ package github
 import (
 	"context"
 	"fmt"
+	"error"
 
 	"github.com/google/go-github/github"
 	"github.com/saromanov/born/provider"
 	structs "github.com/saromanov/born/structs/v1"
 	"github.com/saromanov/gitstar"
 )
+
+var errGithubClientNotDefined = errors.New("github client is not defined")
 
 // Options represents settings for setup Github
 type Options struct {
@@ -20,11 +23,14 @@ type client struct {
 }
 
 // New creates init of connection to Github
-func New(opt Options) provider.Provider {
+func New(opt Options) (provider.Provider, error) {
+	if opt.Client == nil {
+		return nil, errGithubClientNotDefined
+	}
 	c := gitstar.New(opt.Client)
 	return client{
 		client: c,
-	}
+	}, nil
 }
 
 // Teams returns list of the teams for Github account
