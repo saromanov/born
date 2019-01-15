@@ -8,10 +8,10 @@ import (
 	githubl "github.com/google/go-github/github"
 	"github.com/saromanov/born/provider"
 	"github.com/saromanov/born/provider/github"
-	"github.com/urfave/cli"
-	"golang.org/x/oauth2"
 	"github.com/saromanov/born/store"
 	"github.com/saromanov/born/store/postgresql"
+	"github.com/urfave/cli"
+	"golang.org/x/oauth2"
 )
 
 var flags = []cli.Flag{
@@ -52,7 +52,18 @@ func setupProvider(c *cli.Context) (provider.Provider, error) {
 	})
 }
 
-
+// setupStore provides initialization of db store
+// at this moment its support Postgesql
+func setupStore(c *cli.Context) (store.Store, error) {
+	client, err := postgresql.New(&store.Options{
+		Username: c.String("db-username"),
+		Password: c.String("db-password"),
+	})
+	if err != nil {
+		return nil, err
+	}
+	return client, nil
+}
 
 func run(c *cli.Context) {
 	provider, err := setupProvider(c)
@@ -60,6 +71,11 @@ func run(c *cli.Context) {
 		panic(err)
 	}
 	fmt.Println(provider)
+	store, err := setupStore(c)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(store)
 }
 
 func main() {
