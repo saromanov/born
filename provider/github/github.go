@@ -75,3 +75,15 @@ func toTeamList(lst []*github.Organization) []*structs.Team {
 	}
 	return teams
 }
+
+// toRepo provides converting from github representation
+// of repository into Born representation
+func toRepo(r *github.Repository)*structs.Repo {
+	return &structs.Repo{
+		ID: *r.ID,
+		Owner: *r.Owner,
+		Name: *r.Name,
+		FullName: *r.FullName,
+		CloneURL: *r.CloneURL,
+	}
+}

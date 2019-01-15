@@ -7,5 +7,5 @@ type Repo struct {
 	Owner    string `json:"owner"`
 	Name     string `json:"name"`
 	FullName string `json:"full_name"`
-	Avatar   string `json:"avatar_url,omitempty"`
+	CloneURL   string `json:"clone_url,omitempty"`
 }
