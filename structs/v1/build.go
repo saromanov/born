@@ -13,6 +13,7 @@ type Build struct {
 	Branch      string    `json:"branch"`
 	Steps       []Step    `json:"steps"`
 	Services    []Service `json:"services,omitempty"`
+	UserID      string    `json:"user_id"`
 }
 
 // Step defines for Build
