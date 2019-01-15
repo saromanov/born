@@ -60,6 +60,7 @@ func (c *client) Repo(u *structs.User, id int64) (*structs.Repo, error) {
 	if err != nil {
 		return nil, err
 	}
+	return toRepo(u), nil
 }
 
 // toTeamList provides converting from github representation
@@ -78,11 +79,11 @@ func toTeamList(lst []*github.Organization) []*structs.Team {
 
 // toRepo provides converting from github representation
 // of repository into Born representation
-func toRepo(r *github.Repository)*structs.Repo {
+func toRepo(r *github.Repository) *structs.Repo {
 	return &structs.Repo{
-		ID: *r.ID,
-		Owner: *r.Owner,
-		Name: *r.Name,
+		ID:       *r.ID,
+		Owner:    *r.Owner,
+		Name:     *r.Name,
 		FullName: *r.FullName,
 		CloneURL: *r.CloneURL,
 	}
