@@ -35,3 +35,9 @@ type Volume struct {
 // Service defines service for build
 type Service struct {
 }
+
+// BuildRequest defines struct at the POST request
+// for making new build
+type BuildRequest struct {
+	Repo string 
+}
