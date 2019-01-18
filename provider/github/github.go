@@ -2,6 +2,7 @@ package github
 
 import (
 	"context"
+	"encoding/base64"
 	"errors"
 	"fmt"
 
@@ -11,7 +12,10 @@ import (
 	"github.com/saromanov/gitstar"
 )
 
-var errGithubClientNotDefined = errors.New("github client is not defined")
+var (
+	errGithubClientNotDefined = errors.New("github client is not defined")
+	errNoContent              = errors.New("file not contains content")
+)
 
 // Options represents settings for setup Github
 type Options struct {
@@ -64,13 +68,17 @@ func (c client) Repo(u *structs.User, id int64) (*structs.Repo, error) {
 }
 
 // GetContent returns content of the file
-func (c client) GetContent(u *structs.User, repo, path string)(*structs.ContentFile, error) {
+func (c client) GetContent(u *structs.User, repo, path string) (*structs.ContentFile, error) {
 	client := c.client.Client()
-	data, _, err := client.Repositories.GetContents(context.Background(), "saromanov", repo, path)
+	data, _, _, err := client.Repositories.GetContents(context.Background(), "saromanov", repo, path, nil)
 	if err != nil {
 		return nil, err
 	}
-	return toContent(data), nil
+	content, err := toContent(data)
+	if err != nil {
+		return nil, err
+	}
+	return content, nil
 }
 
 // toTeamList provides converting from github representation
@@ -97,4 +105,22 @@ func toRepo(r *github.Repository) *structs.Repo {
 		FullName: *r.FullName,
 		CloneURL: *r.CloneURL,
 	}
+}
+
+// toContent converts RepositoryContent into Born representation
+func toContent(r *github.RepositoryContent) (*structs.ContentFile, error) {
+	content := *r.Content
+	if len(content) == 0 {
+		return nil, errNoContent
+	}
+	decoded, err := base64.StdEncoding.DecodeString(content)
+	if err != nil {
+		return nil, fmt.Errorf("unable to decode file: %v", err)
+	}
+	if len(decoded) == 0 {
+		return nil, errNoContent
+	}
+	return &structs.ContentFile{
+		Content: string(decoded),
+	}, nil
 }
