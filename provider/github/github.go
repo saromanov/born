@@ -63,6 +63,16 @@ func (c client) Repo(u *structs.User, id int64) (*structs.Repo, error) {
 	return toRepo(repo), nil
 }
 
+// GetContent returns content of the file
+func (c client) GetContent(u *structs.User, repo, path string)(*structs.ContentFile, error) {
+	client := c.client.Client()
+	data, _, err := client.Repositories.GetContents(context.Background(), "saromanov", repo, path)
+	if err != nil {
+		return nil, err
+	}
+	return toContent(data), nil
+}
+
 // toTeamList provides converting from github representation
 // of the Team into Born representation of the Team
 func toTeamList(lst []*github.Organization) []*structs.Team {
