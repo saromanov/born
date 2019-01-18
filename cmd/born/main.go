@@ -55,6 +55,7 @@ func setupProvider(c *cli.Context) (provider.Provider, error) {
 // setupStore provides initialization of db store
 // at this moment its support Postgesql
 func setupStore(c *cli.Context) (store.Store, error) {
+	fmt.Println(c.String("db-username"))
 	client, err := postgresql.New(&store.Options{
 		Username: c.String("db-username"),
 		Password: c.String("db-password"),
@@ -81,6 +82,7 @@ func run(c *cli.Context) {
 func main() {
 	app := cli.NewApp()
 	app.Name = "born"
+	app.Flags = flags
 	app.Action = run
 	if err := app.Run(os.Args); err != nil {
 		panic(err)
