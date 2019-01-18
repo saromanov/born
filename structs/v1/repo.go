@@ -7,5 +7,12 @@ type Repo struct {
 	Owner    string `json:"owner"`
 	Name     string `json:"name"`
 	FullName string `json:"full_name"`
-	CloneURL   string `json:"clone_url,omitempty"`
+	CloneURL string `json:"clone_url,omitempty"`
+}
+
+// ContentFile provides definition of content file
+// at the repo
+type ContentFile struct {
+	ID      int64  `json:"id"`
+	Content string `json:"content"`
 }
