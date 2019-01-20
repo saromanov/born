@@ -14,6 +14,7 @@ type client struct {
 
 // New creates new init of the Postgresql
 func New(opt *store.Options) (store.Store, error) {
+	fmt.Println(opt.Username, opt.Password)
 	db, err := gorm.Open("postgres", fmt.Sprintf("user=%s password=%s", opt.Username, opt.Password))
 	if err != nil {
 		return nil, fmt.Errorf("failed to connect database: %v", err)
