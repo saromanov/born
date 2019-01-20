@@ -10,6 +10,7 @@ import (
 	"github.com/saromanov/born/provider/github"
 	"github.com/saromanov/born/store"
 	"github.com/saromanov/born/store/postgresql"
+	"github.com/saromanov/born/server"
 	"github.com/urfave/cli"
 	"golang.org/x/oauth2"
 )
@@ -63,6 +64,11 @@ func setupStore(c *cli.Context) (store.Store, error) {
 		return nil, err
 	}
 	return client, nil
+}
+
+//setupServer provides create of the new server
+func setupServer(c *cli.Context) {
+	server.Setup(c.String("born-server"))
 }
 
 func run(c *cli.Context) {
