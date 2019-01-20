@@ -8,9 +8,9 @@ import (
 	githubl "github.com/google/go-github/github"
 	"github.com/saromanov/born/provider"
 	"github.com/saromanov/born/provider/github"
+	"github.com/saromanov/born/server"
 	"github.com/saromanov/born/store"
 	"github.com/saromanov/born/store/postgresql"
-	"github.com/saromanov/born/server"
 	"github.com/urfave/cli"
 	"golang.org/x/oauth2"
 )
@@ -82,6 +82,8 @@ func run(c *cli.Context) {
 		panic(err)
 	}
 	fmt.Println(store)
+
+	setupServer(c)
 }
 
 func main() {
