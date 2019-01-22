@@ -32,7 +32,7 @@ func newImage() (*image, error) {
 	}, nil
 }
 
-func (a *image) createImage(s *structs.StepConfig) (string, error) {
+func (a *image) createImage(userID string, s *structs.StepConfig) (string, error) {
 	t := time.Now()
 	inputbuf, outputbuf := bytes.NewBuffer(nil), bytes.NewBuffer(nil)
 	tr := tar.NewWriter(inputbuf)
@@ -48,15 +48,16 @@ func (a *image) createImage(s *structs.StepConfig) (string, error) {
 	})
 	tr.Write(bodyBytes)
 	tr.Close()
+	cointainerName := fmt.Sprintf("%s/%s", userID, randomString(imageNameLength))
 	opts := docker.BuildImageOptions{
-		Name:         "test13",
+		Name:         cointainerName,
 		InputStream:  inputbuf,
 		OutputStream: outputbuf,
 	}
 	if err := a.client.BuildImage(opts); err != nil {
 		return "", err
 	}
-	return "", nil
+	return cointainerName, nil
 }
 
 func addCommands(c []string) string {
