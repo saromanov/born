@@ -18,10 +18,8 @@ func Create(u *structs.User, repo string) error {
 		if err != nil {
 			return err
 		}
-		container, err := newContainer(name)
-		if err != nil {
-			return err
-		}
+		container := newContainer(name, client)
+		container.startContainer()
 	}
 	return nil
 }

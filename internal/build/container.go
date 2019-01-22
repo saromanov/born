@@ -15,3 +15,23 @@ func newContainer(name string, c *docker.Client) *container {
 		client: c,
 	}
 }
+
+// startContainer provides starting of container
+func (c *container) startContainer() error {
+	cont, err := c.client.CreateContainer(docker.CreateContainerOptions{
+		Name: c.name,
+		Config: &docker.Config{
+			Image: "golang:latest",
+		},
+	})
+	if err != nil {
+		return err
+	}
+
+	err = c.client.StartContainer(cont.ID, &docker.HostConfig{})
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
