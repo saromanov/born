@@ -1,9 +1,11 @@
 package build
 
 import (
+	"archive/tar"
+	"bytes"
 	"errors"
 	"fmt"
-	"io/ioutil"
+	"time"
 
 	"github.com/fsouza/go-dockerclient"
 	structs "github.com/saromanov/born/structs/v1"
@@ -20,36 +22,41 @@ type image struct {
 }
 
 // newImage creates init for creating of docker images
-func newImage(s *structs.StepConfig) (*image, error) {
+func newImage() (*image, error) {
 	client, err := docker.NewClient(defaultEndpoint)
 	if err != nil {
 		return nil, err
 	}
 	return &image{
-		step:   s,
 		client: client,
 	}, nil
 }
 
-func createImage() error {
+func (a *image) createImage(s *structs.StepConfig) (string, error) {
 	t := time.Now()
 	inputbuf, outputbuf := bytes.NewBuffer(nil), bytes.NewBuffer(nil)
 	tr := tar.NewWriter(inputbuf)
-}
-
-// createDockerImage provides creating of the docker image from config
-func createDockerImage(s *structs.StepConfig) error {
-	var result string
-	if s.Image == "" {
-		return errImageNotDefined
+	body := fmt.Sprintf("%s\n", s.Image)
+	body += addCommands(s.Commands)
+	bodyBytes := []byte(body)
+	tr.WriteHeader(&tar.Header{
+		Name:       "Dockerfile",
+		Size:       int64(len(bodyBytes)),
+		ModTime:    t,
+		AccessTime: t,
+		ChangeTime: t,
+	})
+	tr.Write(bodyBytes)
+	tr.Close()
+	opts := docker.BuildImageOptions{
+		Name:         "test13",
+		InputStream:  inputbuf,
+		OutputStream: outputbuf,
 	}
-	result += fmt.Sprintf("FROM %s", s.Image)
-	if len(s.Commands) > 0 {
-		result += addCommands(s.Commands)
+	if err := a.client.BuildImage(opts); err != nil {
+		return "", err
 	}
-
-	err := ioutil.WriteFile("/path1/Dockerfile", []byte(result), 0644)
-	return err
+	return "", nil
 }
 
 func addCommands(c []string) string {
