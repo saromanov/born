@@ -8,12 +8,12 @@ import structs "github.com/saromanov/born/structs/v1"
 func Create(u *structs.User, repo string) error {
 
 	var c *structs.Config
-	image, err := newImage()
+	client, err := newDockerClient()
 	if err != nil {
 		return err
 	}
-
-	for i := 0; i < c.Steps; i++ {
+	for i := 0; i < len(c.Steps); i++ {
+		image := newImage(client)
 		name, err := image.createImage(u.ID, c.Steps[i])
 		if err != nil {
 			return err
