@@ -25,10 +25,10 @@ func newImage(s *structs.StepConfig) (*image, error) {
 	if err != nil {
 		return nil, err
 	}
-	return nil, &image{
+	return &image{
 		step:   s,
 		client: client,
-	}
+	}, nil
 }
 
 // createDockerImage provides creating of the docker image from config
