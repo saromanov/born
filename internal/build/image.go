@@ -21,15 +21,16 @@ type image struct {
 	step   *structs.StepConfig
 }
 
+// newDockerClient provides initialization of docker client
+func newDockerClient() (*docker.Client, error) {
+	return docker.NewClient(defaultEndpoint)
+}
+
 // newImage creates init for creating of docker images
-func newImage() (*image, error) {
-	client, err := docker.NewClient(defaultEndpoint)
-	if err != nil {
-		return nil, err
-	}
+func newImage(c *docker.Client) *image {
 	return &image{
-		client: client,
-	}, nil
+		client: c,
+	}
 }
 
 func (a *image) createImage(userID string, s structs.StepConfig) (string, error) {
