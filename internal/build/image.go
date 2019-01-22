@@ -5,10 +5,31 @@ import (
 	"fmt"
 	"io/ioutil"
 
+	"github.com/fsouza/go-dockerclient"
 	structs "github.com/saromanov/born/structs/v1"
 )
 
+const defaultEndpoint = "unix:///var/run/docker.sock"
+
 var errImageNotDefined = errors.New("image is not defined")
+
+// image defines structure for handling of Docker images
+type image struct {
+	client *docker.Client
+	step   *structs.StepConfig
+}
+
+// newImage creates init for creating of docker images
+func newImage(s *structs.StepConfig) (*image, error) {
+	client, err := docker.NewClient(defaultEndpoint)
+	if err != nil {
+		return nil, err
+	}
+	return nil, &image{
+		step:   s,
+		client: client,
+	}
+}
 
 // createDockerImage provides creating of the docker image from config
 func createDockerImage(s *structs.StepConfig) error {
@@ -21,7 +42,7 @@ func createDockerImage(s *structs.StepConfig) error {
 		result += addCommands(s.Commands)
 	}
 
-    err := ioutil.WriteFile("/path1/Dockerfile", []byte(result), 0644)
+	err := ioutil.WriteFile("/path1/Dockerfile", []byte(result), 0644)
 	return err
 }
 
