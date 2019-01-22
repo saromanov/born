@@ -1,9 +1,9 @@
 package build
 
 import (
-	"fmt"
 	"errors"
-	"os"
+	"fmt"
+
 	structs "github.com/saromanov/born/structs/v1"
 )
 
@@ -16,4 +16,13 @@ func createDockerImage(s *structs.StepConfig) error {
 		return errImageNotDefined
 	}
 	result += fmt.Sprintf("FROM %s", s.Image)
+	return result
+}
+
+func addCommands(c []string) string {
+	var result string
+	for i := 0; i < len(c); i++ {
+		result += fmt.Sprintf("RUN %s", c[i])
+	}
+	return result
 }
