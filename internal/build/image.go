@@ -3,6 +3,7 @@ package build
 import (
 	"errors"
 	"fmt"
+	"io/ioutil"
 
 	structs "github.com/saromanov/born/structs/v1"
 )
@@ -19,7 +20,9 @@ func createDockerImage(s *structs.StepConfig) error {
 	if len(s.Commands) > 0 {
 		result += addCommands(s.Commands)
 	}
-	return result
+
+    err := ioutil.WriteFile("/path1/Dockerfile", []byte(result), 0644)
+	return err
 }
 
 func addCommands(c []string) string {
