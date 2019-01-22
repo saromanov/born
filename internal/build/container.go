@@ -8,9 +8,10 @@ type container struct {
 	client *docker.Client
 }
 
-func newContainer(name string) *container {
+// newContainer provides initialization of container struct
+func newContainer(name string, c *docker.Client) *container {
 	return &container{
 		name:   name,
-		client: client,
+		client: c,
 	}
 }
