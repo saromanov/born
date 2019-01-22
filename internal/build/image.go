@@ -32,7 +32,7 @@ func newImage() (*image, error) {
 	}, nil
 }
 
-func (a *image) createImage(userID string, s *structs.StepConfig) (string, error) {
+func (a *image) createImage(userID string, s structs.StepConfig) (string, error) {
 	t := time.Now()
 	inputbuf, outputbuf := bytes.NewBuffer(nil), bytes.NewBuffer(nil)
 	tr := tar.NewWriter(inputbuf)
