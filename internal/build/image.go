@@ -16,6 +16,9 @@ func createDockerImage(s *structs.StepConfig) error {
 		return errImageNotDefined
 	}
 	result += fmt.Sprintf("FROM %s", s.Image)
+	if len(s.Commands) > 0 {
+		result += addCommands(s.Commands)
+	}
 	return result
 }
 
