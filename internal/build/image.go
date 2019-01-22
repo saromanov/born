@@ -31,6 +31,12 @@ func newImage(s *structs.StepConfig) (*image, error) {
 	}, nil
 }
 
+func createImage() error {
+	t := time.Now()
+	inputbuf, outputbuf := bytes.NewBuffer(nil), bytes.NewBuffer(nil)
+	tr := tar.NewWriter(inputbuf)
+}
+
 // createDockerImage provides creating of the docker image from config
 func createDockerImage(s *structs.StepConfig) error {
 	var result string
