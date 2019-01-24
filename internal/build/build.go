@@ -2,7 +2,17 @@
 // handling of builds
 package build
 
-import structs "github.com/saromanov/born/structs/v1"
+import (
+	"strings"
+
+	"github.com/saromanov/born/provider"
+	structs "github.com/saromanov/born/structs/v1"
+)
+
+// Build defines structure for build
+type Build struct {
+	p provider.Provider
+}
 
 // Create method provides creating of the build
 func Create(u *structs.User, repo string) error {
@@ -26,7 +36,11 @@ func Create(u *structs.User, repo string) error {
 
 // getBornFile provides getting of the .born.yml file
 // from the repo
-func getBornFile(repo string) error {
-
+func (b *Build) getBornFile(repo string) error {
+	res := strings.Split(repo)
+	_, err := b.p.Repo(nil, res[0], res[1])
+	if err != nil {
+		return err
+	}
 	return nil
 }
