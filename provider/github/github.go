@@ -58,13 +58,13 @@ func (c client) Teams(u *structs.User) ([]*structs.Team, error) {
 }
 
 // Repo returns specified repo
-func (c client) Repo(u *structs.User, id int64) (*structs.Repo, error) {
+func (c client) Repo(u *structs.User, owner, repo string) (*structs.Repo, error) {
 	client := c.client.Client()
-	repo, _, err := client.Repositories.GetByID(context.Background(), id)
+	r, _, err := client.Repositories.Get(context.Background(), owner, repo)
 	if err != nil {
 		return nil, err
 	}
-	return toRepo(repo), nil
+	return toRepo(r), nil
 }
 
 // GetContent returns content of the file
