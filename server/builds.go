@@ -6,11 +6,13 @@ import (
 	"net/http"
 
 	"github.com/saromanov/born/internal/build"
+	"github.com/saromanov/born/provider"
+	"github.com/saromanov/born/store"
 	structs "github.com/saromanov/born/structs/v1"
 )
 
 // createBuild provides creating of the new build
-func createBuild(w http.ResponseWriter, r *http.Request) {
+func createBuild(p provider.Provider, s store.Store, w http.ResponseWriter, r *http.Request) {
 	token := r.Header.Get("X-BORN-TOKEN")
 	decoder := json.NewDecoder(r.Body)
 	payload := &structs.BuildRequest{}
@@ -25,6 +27,7 @@ func createBuild(w http.ResponseWriter, r *http.Request) {
 	}
 	b := &build.Build{
 		Repo: payload.Repo,
+		P:    p,
 	}
 	err = b.Create()
 	if err != nil {

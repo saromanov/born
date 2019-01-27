@@ -19,12 +19,14 @@ const (
 )
 
 type handler struct {
-	handler func(http.ResponseWriter, *http.Request)
+	handler func(provider.Provider, store.Store, http.ResponseWriter, *http.Request)
+	P       provider.Provider
+	S       store.Store
 }
 
 func (handle *handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", contentType)
-	handle.handler(w, r)
+	handle.handler(handle.P, handle.S, w, r)
 }
 
 // Health provides healthcheck of the server
@@ -38,7 +40,7 @@ func Setup(p provider.Provider, s store.Store, addr string) {
 		addr = defaultAddress
 	}
 	router := mux.NewRouter().StrictSlash(true)
-	router.Handle("/v1/builds", &handler{handler: createBuild}).Methods("POST")
+	router.Handle("/v1/builds", &handler{P: p, S: s, handler: createBuild}).Methods("POST")
 	authData := auth.New(&auth.Config{})
 	authData.RegisterProvider(password.New(&password.Config{}))
 
