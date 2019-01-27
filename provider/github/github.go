@@ -121,6 +121,6 @@ func toContent(r *github.RepositoryContent) (*structs.ContentFile, error) {
 		return nil, errNoContent
 	}
 	return &structs.ContentFile{
-		Content: string(decoded),
+		Content: decoded,
 	}, nil
 }

@@ -24,6 +24,7 @@ func (b *Build) Create() error {
 	if err != nil {
 		return fmt.Errorf("unable to get born file: %v", err)
 	}
+	fmt.Println("CONFIG: ", c)
 	client, err := newDockerClient()
 	if err != nil {
 		return err
@@ -47,7 +48,7 @@ func (b *Build) Create() error {
 // from the repo. repo on format https://github.com/<owner>/<name>
 func (b *Build) getBornFile(repo string) (*structs.Config, error) {
 	res := strings.Split(repo, "/")
-	_, err := b.P.GetContent(&structs.GetContentProvider{
+	resp, err := b.P.GetContent(&structs.GetContentProvider{
 		Owner:    res[len(res)-2],
 		Repo:     res[len(res)-1],
 		FileName: ".born.yml",
@@ -55,5 +56,5 @@ func (b *Build) getBornFile(repo string) (*structs.Config, error) {
 	if err != nil {
 		return nil, err
 	}
-	return nil, nil
+	return parseConfig(resp.Content)
 }
