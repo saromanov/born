@@ -16,3 +16,12 @@ type ContentFile struct {
 	ID      int64  `json:"id"`
 	Content string `json:"content"`
 }
+
+// GetContentRequest defines request for getting content of
+//the file from repo
+type GetContentRequest struct {
+	u        *User
+	repo     string
+	owner    string
+	fileName string
+}
