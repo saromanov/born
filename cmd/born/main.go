@@ -67,8 +67,8 @@ func setupStore(c *cli.Context) (store.Store, error) {
 }
 
 //setupServer provides create of the new server
-func setupServer(c *cli.Context) {
-	server.Setup(c.String("born-server"))
+func setupServer(p provider.Provider, s store.Store, c *cli.Context) {
+	server.Setup(p, s, c.String("born-server"))
 }
 
 func run(c *cli.Context) {
@@ -83,7 +83,7 @@ func run(c *cli.Context) {
 	}
 	fmt.Println(store)
 
-	setupServer(c)
+	setupServer(provider, store, c)
 }
 
 func main() {

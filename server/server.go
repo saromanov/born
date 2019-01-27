@@ -9,6 +9,8 @@ import (
 	"github.com/qor/auth"
 	"github.com/qor/auth/providers/password"
 	"github.com/qor/session/manager"
+	"github.com/saromanov/born/provider"
+	"github.com/saromanov/born/store"
 )
 
 const (
@@ -31,7 +33,7 @@ func Health(w http.ResponseWriter, r *http.Request) {
 }
 
 // Setup Provides setup of the server
-func Setup(addr string) {
+func Setup(p provider.Provider, s store.Store, addr string) {
 	if addr == "" {
 		addr = defaultAddress
 	}
