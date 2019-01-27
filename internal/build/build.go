@@ -3,6 +3,7 @@
 package build
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/saromanov/born/provider"
@@ -19,7 +20,10 @@ type Build struct {
 // Create method provides creating of the build
 func (b *Build) Create() error {
 
-	var c *structs.Config
+	c, err := b.getBornFile(b.Repo)
+	if err != nil {
+		return fmt.Errorf("unable to get born file: %v", err)
+	}
 	client, err := newDockerClient()
 	if err != nil {
 		return err
@@ -41,11 +45,11 @@ func (b *Build) Create() error {
 
 // getBornFile provides getting of the .born.yml file
 // from the repo. repo on format https://github.com/<owner>/<name>
-func (b *Build) getBornFile(repo string) error {
+func (b *Build) getBornFile(repo string) (*structs.Config, error) {
 	res := strings.Split(repo, "/")
 	_, err := b.P.Repo(nil, res[len(res)-2], res[len(res)-1])
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return nil, nil
 }
