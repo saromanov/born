@@ -17,11 +17,11 @@ type ContentFile struct {
 	Content string `json:"content"`
 }
 
-// GetContentRequest defines request for getting content of
+// GetContentProvider defines request for getting content of
 //the file from repo
-type GetContentRequest struct {
-	u        *User
-	repo     string
-	owner    string
-	fileName string
+type GetContentProvider struct {
+	U        *User
+	Repo     string
+	Owner    string
+	FileName string
 }

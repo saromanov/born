@@ -6,5 +6,5 @@ import structs "github.com/saromanov/born/structs/v1"
 type Provider interface {
 	Teams(*structs.User) ([]*structs.Team, error)
 	Repo(*structs.User, string, string) (*structs.Repo, error)
-	GetContent(*structs.User, string, string) (*structs.ContentFile, error)
+	GetContent(*structs.GetContentProvider) (*structs.ContentFile, error)
 }

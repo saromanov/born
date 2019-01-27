@@ -47,7 +47,11 @@ func (b *Build) Create() error {
 // from the repo. repo on format https://github.com/<owner>/<name>
 func (b *Build) getBornFile(repo string) (*structs.Config, error) {
 	res := strings.Split(repo, "/")
-	_, err := b.P.Repo(nil, res[len(res)-2], res[len(res)-1])
+	_, err := b.P.GetContent(&structs.GetContentProvider{
+		Owner:    res[len(res)-2],
+		Repo:     res[len(res)-1],
+		FileName: ".born.yml",
+	})
 	if err != nil {
 		return nil, err
 	}

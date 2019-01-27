@@ -68,9 +68,9 @@ func (c client) Repo(u *structs.User, owner, repo string) (*structs.Repo, error)
 }
 
 // GetContent returns content of the file
-func (c client) GetContent(u *structs.User, repo, path string) (*structs.ContentFile, error) {
+func (c client) GetContent(p *structs.GetContentProvider) (*structs.ContentFile, error) {
 	client := c.client.Client()
-	data, _, _, err := client.Repositories.GetContents(context.Background(), "saromanov", repo, path, nil)
+	data, _, _, err := client.Repositories.GetContents(context.Background(), p.Owner, p.Repo, p.FileName, nil)
 	if err != nil {
 		return nil, err
 	}
