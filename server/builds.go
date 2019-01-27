@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/saromanov/born/internal/build"
 	structs "github.com/saromanov/born/structs/v1"
 )
 
@@ -20,6 +21,14 @@ func createBuild(w http.ResponseWriter, r *http.Request) {
 	}
 	if payload.Repo == "" {
 		http.Error(w, "repo is not defined", http.StatusBadRequest)
+		return
+	}
+	b := &build.Build{
+		Repo: payload.Repo,
+	}
+	err = b.Create()
+	if err != nil {
+		http.Error(w, fmt.Sprintf("unable to create build: %v", err), http.StatusBadRequest)
 		return
 	}
 	payload.UserID = token

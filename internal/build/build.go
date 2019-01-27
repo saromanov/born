@@ -11,11 +11,13 @@ import (
 
 // Build defines structure for build
 type Build struct {
-	p provider.Provider
+	P    provider.Provider
+	User *structs.User
+	Repo string
 }
 
 // Create method provides creating of the build
-func Create(u *structs.User, repo string) error {
+func (b *Build) Create() error {
 
 	var c *structs.Config
 	client, err := newDockerClient()
@@ -24,7 +26,7 @@ func Create(u *structs.User, repo string) error {
 	}
 	for i := 0; i < len(c.Steps); i++ {
 		image := newImage(client)
-		name, err := image.createImage(u.ID, c.Steps[i])
+		name, err := image.createImage(b.User.ID, c.Steps[i])
 		if err != nil {
 			return err
 		}
@@ -41,7 +43,7 @@ func Create(u *structs.User, repo string) error {
 // from the repo. repo on format https://github.com/<owner>/<name>
 func (b *Build) getBornFile(repo string) error {
 	res := strings.Split(repo, "/")
-	_, err := b.p.Repo(nil, res[len(res)-2], res[len(res)-1])
+	_, err := b.P.Repo(nil, res[len(res)-2], res[len(res)-1])
 	if err != nil {
 		return err
 	}
