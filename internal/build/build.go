@@ -40,7 +40,7 @@ func Create(u *structs.User, repo string) error {
 // getBornFile provides getting of the .born.yml file
 // from the repo
 func (b *Build) getBornFile(repo string) error {
-	res := strings.Split(repo)
+	res := strings.Split(repo, "/")
 	_, err := b.p.Repo(nil, res[0], res[1])
 	if err != nil {
 		return err
