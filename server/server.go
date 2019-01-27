@@ -28,5 +28,6 @@ func Setup(addr string) {
 
 	mux.Handle("/auth/", authData.NewServeMux())
 	http.HandleFunc("/health", Health)
+	log.Printf("starting server at %s", addr)
 	log.Fatal(http.ListenAndServe(addr, manager.SessionManager.Middleware(mux)))
 }
