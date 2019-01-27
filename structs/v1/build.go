@@ -39,6 +39,6 @@ type Service struct {
 // BuildRequest defines struct at the POST request
 // for making new build
 type BuildRequest struct {
-	Repo   string
-	UserID string
+	Repo   string `json:"repo"`
+	UserID string `json:"user_id"`
 }

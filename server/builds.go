@@ -12,14 +12,13 @@ import (
 func createBuild(w http.ResponseWriter, r *http.Request) {
 	token := r.Header.Get("X-BORN-TOKEN")
 	decoder := json.NewDecoder(r.Body)
-	var payload *structs.BuildRequest
+	payload := &structs.BuildRequest{}
 	err := decoder.Decode(payload)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("unable to unmarshal input: %v", err), http.StatusBadRequest)
 		return
 	}
 	if payload.Repo == "" {
-		w.WriteHeader(http.StatusBadRequest)
 		http.Error(w, "repo is not defined", http.StatusBadRequest)
 		return
 	}
