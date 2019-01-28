@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"errors"
 
 	githubl "github.com/google/go-github/github"
 	"github.com/saromanov/born/provider"
@@ -14,6 +15,8 @@ import (
 	"github.com/urfave/cli"
 	"golang.org/x/oauth2"
 )
+
+var errDBCredsIsNotDefined = errors.New("db: username and password is not defined")
 
 var flags = []cli.Flag{
 	cli.StringFlag{
@@ -56,6 +59,11 @@ func setupProvider(c *cli.Context) (provider.Provider, error) {
 // setupStore provides initialization of db store
 // at this moment its support Postgesql
 func setupStore(c *cli.Context) (store.Store, error) {
+	username := c.String("db-username")
+	password := c.String("db-password")
+	if username == "" && password == "" {
+		return nil, errDBCredsIsNotDefined
+	}
 	client, err := postgresql.New(&store.Options{
 		Username: c.String("db-username"),
 		Password: c.String("db-password"),
