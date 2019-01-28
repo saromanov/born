@@ -2,9 +2,9 @@ package v1
 
 // Config provides definition of the config at .born.yml
 type Config struct {
-	Pipeline string       `yaml:"pipeline"`
-	Name     string       `yaml:"name"`
-	Steps    []StepConfig `yaml:"steps"`
+	Pipeline string                 `yaml:"pipeline"`
+	Name     string                 `yaml:"name"`
+	Steps    map[string]interface{} `yaml:"steps"`
 }
 
 // StepConfig defines step at the .born.yml

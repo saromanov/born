@@ -29,8 +29,9 @@ func (b *Build) Create() error {
 	if err != nil {
 		return err
 	}
+	fmt.Println(client)
 	for i := 0; i < len(c.Steps); i++ {
-		image := newImage(client)
+		/*image := newImage(client)
 		name, err := image.createImage(b.User.ID, c.Steps[i])
 		if err != nil {
 			return err
@@ -39,7 +40,7 @@ func (b *Build) Create() error {
 		err = container.startContainer()
 		if err != nil {
 			continue
-		}
+		}*/
 	}
 	return nil
 }
