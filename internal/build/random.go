@@ -3,7 +3,7 @@ package build
 import "math/rand"
 
 const (
-	letterBytes     = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	letterBytes     = "abcdefghijklmnopqrstuvwxyz"
 	imageNameLength = 20
 )
 
