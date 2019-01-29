@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/fsouza/go-dockerclient"
 	"github.com/saromanov/born/provider"
 	structs "github.com/saromanov/born/structs/v1"
 )
@@ -69,18 +70,26 @@ func (b *Build) Create() error {
 		if err != nil {
 			continue
 		}
+		if buildStep.Parallel {
+			go func(c *docker.Client, s string, bs BuildStep) {
+				b.execuiteStep(c, s, bs)
+			}(client, step, buildStep)
+		} else {
+			b.execuiteStep(client, step, buildStep)
+		}
 	}
 	return nil
 }
 
 // executeStep provides executing of the build step
-func (b *Build) execuiteStep(client *docker.Client, comm interface{}, step string, buildStep BuildStep) error {
+func (b *Build) execuiteStep(client *docker.Client, step string, buildStep BuildStep) error {
 	image := newImage(client)
 	name, err := image.createImage("1", step, buildStep)
 	if err != nil {
 		return err
 	}
 	fmt.Println(name)
+	return nil
 }
 
 // getBornFile provides getting of the .born.yml file
