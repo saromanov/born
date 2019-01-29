@@ -47,9 +47,10 @@ func (a *image) createImage(userID, stepName string, s BuildStep) (string, error
 	t := time.Now()
 	inputbuf, outputbuf := bytes.NewBuffer(nil), bytes.NewBuffer(nil)
 	tr := tar.NewWriter(inputbuf)
-	body := fmt.Sprintf("%s\n", s.Image)
-	body += fmt.Sprintf("RUN %s step", stepName)
+	body := fmt.Sprintf("FROM %s\n", s.Image)
+	body += fmt.Sprintf("RUN echo %s step", stepName)
 	body += addCommands(s.Commands)
+	fmt.Println(body)
 	bodyBytes := []byte(body)
 	tr.WriteHeader(&tar.Header{
 		Name:       "Dockerfile",
