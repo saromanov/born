@@ -33,11 +33,12 @@ func newImage(c *docker.Client) *image {
 	}
 }
 
-func (a *image) createImage(userID string, s structs.StepConfig) (string, error) {
+func (a *image) createImage(userID, stepName string, s BuildStep) (string, error) {
 	t := time.Now()
 	inputbuf, outputbuf := bytes.NewBuffer(nil), bytes.NewBuffer(nil)
 	tr := tar.NewWriter(inputbuf)
 	body := fmt.Sprintf("%s\n", s.Image)
+	body += fmt.Sprintf("RUN %s step", stepName)
 	body += addCommands(s.Commands)
 	bodyBytes := []byte(body)
 	tr.WriteHeader(&tar.Header{

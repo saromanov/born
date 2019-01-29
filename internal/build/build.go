@@ -19,8 +19,9 @@ type BuildStep struct {
 	Commands []string
 }
 
-func parseStep(value map[string]interface{}) (BuildStep, error) {
-	image, ok := value["image"]
+func parseStep(value interface{}) (BuildStep, error) {
+	data := value.(map[string]interface{})
+	image, ok := data["image"]
 	if !ok {
 		return BuildStep{}, errNoImage
 	}
@@ -51,8 +52,12 @@ func (b *Build) Create() error {
 	}
 
 	for step, comm := range c.Steps {
+		buildStep, err := parseStep(comm)
+		if err != nil {
+			continue
+		}
 		image := newImage(client)
-		name, err := image.createImage(b.User.ID, c.Steps[i])
+		name, err := image.createImage(b.User.ID, step, buildStep)
 		if err != nil {
 			return err
 		}
