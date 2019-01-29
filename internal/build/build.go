@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"strings"
+	"sync"
 
 	"github.com/fsouza/go-dockerclient"
 	"github.com/saromanov/born/provider"
@@ -59,11 +60,12 @@ type Build struct {
 	P    provider.Provider
 	User *structs.User
 	Repo string
+	mu   *sync.RWMutex
 }
 
 // Create method provides creating of the build
 func (b *Build) Create() error {
-
+	b.mu = &sync.RWMutex{}
 	c, err := b.getBornFile(b.Repo)
 	if err != nil {
 		return fmt.Errorf("unable to get born file: %v", err)
