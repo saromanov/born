@@ -32,7 +32,12 @@ func parseStep(value interface{}) (BuildStep, error) {
 	}
 	commands, ok := data["commands"]
 	if ok {
-		s.Commands = commands.([]string)
+		commandsOld := commands.([]interface{})
+		commands := make([]string, len(commandsOld))
+		for i := range commandsOld {
+			commands[i] = commandsOld[i].(string)
+		}
+		s.Commands = commands
 	}
 	return s, nil
 }
