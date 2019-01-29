@@ -57,10 +57,11 @@ func parseStep(value interface{}) (BuildStep, error) {
 
 // Build defines structure for build
 type Build struct {
-	P    provider.Provider
-	User *structs.User
-	Repo string
-	mu   *sync.RWMutex
+	P      provider.Provider
+	User   *structs.User
+	Repo   string
+	mu     *sync.RWMutex
+	images []string
 }
 
 // Create method provides creating of the build
@@ -76,6 +77,7 @@ func (b *Build) Create() error {
 		return err
 	}
 
+	b.images = make([]string, len(c.Steps))
 	for step, comm := range c.Steps {
 		buildStep, err := parseStep(comm)
 		if err != nil {
