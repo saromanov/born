@@ -10,6 +10,12 @@ import (
 	structs "github.com/saromanov/born/structs/v1"
 )
 
+// BuildStep provides definition for the build step
+type BuildStep struct {
+	Image    string
+	Commands []string
+}
+
 // Build defines structure for build
 type Build struct {
 	P    provider.Provider
