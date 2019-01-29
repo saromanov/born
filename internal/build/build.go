@@ -95,14 +95,9 @@ func (b *Build) Create() error {
 }
 
 // executeStep provides executing of the build step
-func (b *Build) execuiteStep(client *docker.Client, step string, buildStep BuildStep) error {
+func (b *Build) execuiteStep(client *docker.Client, step string, buildStep BuildStep) (string, error) {
 	image := newImage(client)
-	name, err := image.createImage("1", step, buildStep)
-	if err != nil {
-		return err
-	}
-	fmt.Println(name)
-	return nil
+	return image.createImage("1", step, buildStep)
 }
 
 // getBornFile provides getting of the .born.yml file
