@@ -19,6 +19,7 @@ type BuildStep struct {
 	Commands []string
 }
 
+// parseStep provides parsing of the step from the config
 func parseStep(value interface{}) (BuildStep, error) {
 	data := value.(map[interface{}]interface{})
 	image, ok := data["image"]
