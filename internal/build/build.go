@@ -20,11 +20,12 @@ type BuildStep struct {
 }
 
 func parseStep(value interface{}) (BuildStep, error) {
-	data := value.(map[string]interface{})
+	data := value.(map[interface{}]interface{})
 	image, ok := data["image"]
 	if !ok {
 		return BuildStep{}, errNoImage
 	}
+	fmt.Println("IMAGE: ", image)
 
 	return BuildStep{
 		Image: image.(string),
@@ -57,7 +58,7 @@ func (b *Build) Create() error {
 			continue
 		}
 		image := newImage(client)
-		name, err := image.createImage(b.User.ID, step, buildStep)
+		name, err := image.createImage("1", step, buildStep)
 		if err != nil {
 			return err
 		}
