@@ -33,6 +33,16 @@ func newImage(c *docker.Client) *image {
 	}
 }
 
+// pullImage provides pulling of the image
+func (a *image) pullImage(name string) error {
+	err := a.client.PullImage(docker.PullImageOptions{
+		Repository: name,
+	}, docker.AuthConfiguration{})
+	if err != nil {
+		return fmt.Errorf("unable to pull image: %v %s", err, name)
+	}
+	return nil
+}
 func (a *image) createImage(userID, stepName string, s BuildStep) (string, error) {
 	t := time.Now()
 	inputbuf, outputbuf := bytes.NewBuffer(nil), bytes.NewBuffer(nil)
