@@ -64,18 +64,6 @@ func (b *Build) Create() error {
 		}
 		fmt.Println(name)
 	}
-	for i := 0; i < len(c.Steps); i++ {
-		/*image := newImage(client)
-		name, err := image.createImage(b.User.ID, c.Steps[i])
-		if err != nil {
-			return err
-		}
-		container := newContainer(name, client)
-		err = container.startContainer()
-		if err != nil {
-			continue
-		}*/
-	}
 	return nil
 }
 
