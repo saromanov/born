@@ -18,6 +18,7 @@ type BuildStep struct {
 	Image    string
 	Name     string
 	Commands []string
+	Parallel bool
 }
 
 // parseStep provides parsing of the step from the config
@@ -68,14 +69,18 @@ func (b *Build) Create() error {
 		if err != nil {
 			continue
 		}
-		image := newImage(client)
-		name, err := image.createImage("1", step, buildStep)
-		if err != nil {
-			return err
-		}
-		fmt.Println(name)
 	}
 	return nil
+}
+
+// executeStep provides executing of the build step
+func (b *Build) execuiteStep(client *docker.Client, comm interface{}, step string, buildStep BuildStep) error {
+	image := newImage(client)
+	name, err := image.createImage("1", step, buildStep)
+	if err != nil {
+		return err
+	}
+	fmt.Println(name)
 }
 
 // getBornFile provides getting of the .born.yml file
