@@ -16,6 +16,7 @@ var errNoImage = errors.New("image is not defined")
 // BuildStep provides definition for the build step
 type BuildStep struct {
 	Image    string
+	Name     string
 	Commands []string
 }
 
