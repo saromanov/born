@@ -3,6 +3,7 @@
 package build
 
 import (
+	"errors"
 	"fmt"
 	"strings"
 
@@ -10,10 +11,23 @@ import (
 	structs "github.com/saromanov/born/structs/v1"
 )
 
+var errNoImage = errors.New("image is not defined")
+
 // BuildStep provides definition for the build step
 type BuildStep struct {
 	Image    string
 	Commands []string
+}
+
+func parseStep(value map[string]interface{}) (BuildStep, error) {
+	image, ok := value["image"]
+	if !ok {
+		return BuildStep{}, errNoImage
+	}
+
+	return BuildStep{
+		Image: image.(string),
+	}, nil
 }
 
 // Build defines structure for build
