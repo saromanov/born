@@ -42,6 +42,15 @@ func parseStep(value interface{}) (BuildStep, error) {
 		}
 		s.Commands = commands
 	}
+
+	parallel, ok := data["parallel"]
+	if ok {
+		s.Parallel = parallel.(bool)
+	}
+	name, ok := data["name"]
+	if ok {
+		s.Name = name.(string)
+	}
 	return s, nil
 }
 
