@@ -26,10 +26,14 @@ func parseStep(value interface{}) (BuildStep, error) {
 		return BuildStep{}, errNoImage
 	}
 	fmt.Println("IMAGE: ", image)
-
-	return BuildStep{
+	s := BuildStep{
 		Image: image.(string),
-	}, nil
+	}
+	commands, ok := data["commands"]
+	if ok {
+		s.Commands = commands.([]string)
+	}
+	return s, nil
 }
 
 // Build defines structure for build
