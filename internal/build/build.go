@@ -88,7 +88,11 @@ func (b *Build) Create() error {
 				b.execuiteStep(c, s, bs)
 			}(client, step, buildStep)
 		} else {
-			b.execuiteStep(client, step, buildStep)
+			name, err := b.execuiteStep(client, step, buildStep)
+			if err != nil {
+				return err
+			}
+			b.images = append(b.images, name)
 		}
 	}
 	return nil
