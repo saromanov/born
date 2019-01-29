@@ -67,7 +67,7 @@ func (a *image) createImage(userID, stepName string, s BuildStep) (string, error
 		OutputStream: outputbuf,
 	}
 	if err := a.client.BuildImage(opts); err != nil {
-		return "", err
+		return "", fmt.Errorf("unable to build image: %v", err)
 	}
 	return cointainerName, nil
 }
