@@ -125,6 +125,6 @@ func (b *Build) getBornFile(repo string) (*structs.Config, error) {
 }
 
 // returns URL for clone repo
-func (b *Build) getCloneURL(repo)(string, error){
-	return, "", nil
+func (b *Build) getCloneURL(repo string) (string, error) {
+	return "", nil
 }
