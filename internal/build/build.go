@@ -123,3 +123,8 @@ func (b *Build) getBornFile(repo string) (*structs.Config, error) {
 	}
 	return parseConfig(resp.Content)
 }
+
+// returns URL for clone repo
+func (b *Build) getCloneURL(repo)(string, error){
+	return, "", nil
+}
