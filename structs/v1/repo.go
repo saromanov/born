@@ -2,12 +2,13 @@ package v1
 
 // Repo defines object for repository
 type Repo struct {
-	ID       int64  `json:"id,omitempty"`
-	UserID   int64  `json:"-"`
-	Owner    string `json:"owner"`
-	Name     string `json:"name"`
-	FullName string `json:"full_name"`
-	CloneURL string `json:"clone_url,omitempty"`
+	ID         int64  `json:"id,omitempty"`
+	UserID     int64  `json:"-"`
+	Owner      string `json:"owner"`
+	Name       string `json:"name"`
+	FullName   string `json:"full_name"`
+	CloneURL   string `json:"clone_url,omitempty"`
+	ArchiveURL string `json:"archive_url,omitempty"`
 }
 
 // ContentFile provides definition of content file

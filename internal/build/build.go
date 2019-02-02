@@ -79,7 +79,7 @@ func (b *Build) Create() error {
 	if err != nil {
 		return fmt.Errorf("unable to get repo: %v", err)
 	}
-	fmt.Println("REPO: ", repo)
+	fmt.Println("REPO: ", repo.ArchiveURL)
 	client, err := newDockerClient()
 	if err != nil {
 		return err
@@ -90,6 +90,7 @@ func (b *Build) Create() error {
 	for step, comm := range c.Steps {
 		buildStep, err := parseStep(comm)
 		if err != nil {
+			fmt.Println("ERR: ", err)
 			continue
 		}
 		/*if buildStep.Parallel {

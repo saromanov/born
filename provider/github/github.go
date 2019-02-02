@@ -104,6 +104,7 @@ func toRepo(r *github.Repository) *structs.Repo {
 		Name:     *r.Name,
 		FullName: *r.FullName,
 		CloneURL: *r.CloneURL,
+		ArchiveURL: *r.ArchiveURL,
 	}
 }
 
