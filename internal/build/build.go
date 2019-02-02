@@ -13,7 +13,10 @@ import (
 	structs "github.com/saromanov/born/structs/v1"
 )
 
-var errNoImage = errors.New("image is not defined")
+var (
+	errNoImage           = errors.New("image is not defined")
+	errRepoInvalidFormat = errors.New("repo url have invalid format")
+)
 
 // BuildStep provides definition for the build step
 type BuildStep struct {
@@ -114,6 +117,9 @@ func (b *Build) execuiteStep(client *docker.Client, step string, buildStep Build
 // from the repo. repo on format https://github.com/<owner>/<name>
 func (b *Build) getBornFile(repo string) (*structs.Config, error) {
 	res := strings.Split(repo, "/")
+	if len(res) < 2 {
+		return nil, errRepoInvalidFormat
+	}
 	owner := res[len(res)-2]
 	repoName := res[len(res)-1]
 	resp, err := b.P.GetContent(&structs.GetContentProvider{
