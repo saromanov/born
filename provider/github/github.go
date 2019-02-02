@@ -5,6 +5,7 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
+	"strings"
 
 	"github.com/google/go-github/github"
 	"github.com/saromanov/born/provider"
@@ -99,12 +100,12 @@ func toTeamList(lst []*github.Organization) []*structs.Team {
 // of repository into Born representation
 func toRepo(r *github.Repository) *structs.Repo {
 	return &structs.Repo{
-		ID:       *r.ID,
-		Owner:    fmt.Sprintf("%d", *r.Owner.ID),
-		Name:     *r.Name,
-		FullName: *r.FullName,
-		CloneURL: *r.CloneURL,
-		ArchiveURL: *r.ArchiveURL,
+		ID:         *r.ID,
+		Owner:      fmt.Sprintf("%d", *r.Owner.ID),
+		Name:       *r.Name,
+		FullName:   *r.FullName,
+		CloneURL:   *r.CloneURL,
+		ArchiveURL: fmt.Sprintf("%s/zipball/master", strings.Split(*r.ArchiveURL, "/{")[0]),
 	}
 }
 
