@@ -81,17 +81,11 @@ func (b *Build) Create() error {
 	}
 
 	b.images = make([]string, len(c.Steps))
-	defer func(imgs []string) {
-		for i := 0; i < len(imgs); i++ {
-			client.RemoveImage(imgs[i])
-		}
-	}(b.images)
 	for step, comm := range c.Steps {
 		buildStep, err := parseStep(comm)
 		if err != nil {
 			continue
 		}
-		fmt.Println(buildStep.Parallel)
 		if buildStep.Parallel {
 			go func(c *docker.Client, s string, bs BuildStep) {
 				b.execuiteStep(c, s, bs)
@@ -104,6 +98,13 @@ func (b *Build) Create() error {
 			b.images = append(b.images, name)
 		}
 	}
+
+	defer func(imgs []string) {
+		for i := 0; i < len(imgs); i++ {
+			client.RemoveImage(imgs[i])
+		}
+	}(b.images)
+
 	return nil
 }
 
