@@ -74,7 +74,12 @@ func (b *Build) Create() error {
 	if err != nil {
 		return fmt.Errorf("unable to get born file: %v", err)
 	}
-	fmt.Println("CONFIG: ", c)
+
+	repo, err := b.getRepo(b.Repo)
+	if err != nil {
+		return fmt.Errorf("unable to get repo: %v", err)
+	}
+	fmt.Println("REPO: ", repo)
 	client, err := newDockerClient()
 	if err != nil {
 		return err
@@ -135,6 +140,19 @@ func (b *Build) getBornFile(repo string) (*structs.Config, error) {
 		return nil, err
 	}
 	return parseConfig(resp.Content)
+}
+
+func (b *Build) getRepo(repo string) (*structs.Repo, error) {
+	owner, repoName, err := parseRepoURL(repo)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := b.P.Repo(nil, owner, repoName)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
 }
 
 // parseRepoUrl returns owner and repo name
