@@ -2,14 +2,18 @@ package build
 
 import (
 	"archive/zip"
+	"errors"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
 
 	"github.com/saromanov/godownload"
 )
+
+var errDirNotFound = errors.New("cloned directory is not found")
 
 // downloadRepo provides downloading of the repo
 func downloadRepo(link, branch string) error {
@@ -22,6 +26,18 @@ func downloadRepo(link, branch string) error {
 		return fmt.Errorf("unable to unzip repo: %v", err)
 	}
 	return nil
+}
+
+func getDownloadedPath(path string) (string, error) {
+	files, err := ioutil.ReadDir(path)
+	if err != nil {
+		return "", fmt.Errorf("unable to open dir: %v", err)
+	}
+	if len(files) == 0 {
+		return "", errDirNotFound
+	}
+
+	return fmt.Sprintf("%s/%s", path, files[0].Name()), nil
 }
 
 // unzip provides unzipping of the dir to output folder
