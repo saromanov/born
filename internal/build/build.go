@@ -88,6 +88,7 @@ func (b *Build) Create() error {
 		if err != nil {
 			continue
 		}
+		fmt.Println(buildStep.Parallel)
 		if buildStep.Parallel {
 			go func(c *docker.Client, s string, bs BuildStep) {
 				b.execuiteStep(c, s, bs)
@@ -113,9 +114,11 @@ func (b *Build) execuiteStep(client *docker.Client, step string, buildStep Build
 // from the repo. repo on format https://github.com/<owner>/<name>
 func (b *Build) getBornFile(repo string) (*structs.Config, error) {
 	res := strings.Split(repo, "/")
+	owner := res[len(res)-2]
+	repoName := res[len(res)-1]
 	resp, err := b.P.GetContent(&structs.GetContentProvider{
-		Owner:    res[len(res)-2],
-		Repo:     res[len(res)-1],
+		Owner:    owner,
+		Repo:     repoName,
 		FileName: ".born.yml",
 	})
 	if err != nil {
