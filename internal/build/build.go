@@ -24,6 +24,7 @@ type BuildStep struct {
 	Name     string
 	Commands []string
 	Parallel bool
+	Path     string
 }
 
 // parseStep provides parsing of the step from the config
@@ -98,6 +99,7 @@ func (b *Build) Create() error {
 			fmt.Println("ERR: ", err)
 			continue
 		}
+		buildStep.Path = path
 		/*if buildStep.Parallel {
 			wg.Add(1)
 			go func(c *docker.Client, s string, bs BuildStep) {

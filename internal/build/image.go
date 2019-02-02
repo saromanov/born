@@ -48,6 +48,7 @@ func (a *image) createImage(userID, stepName string, s BuildStep) (string, error
 	inputbuf, outputbuf := bytes.NewBuffer(nil), bytes.NewBuffer(nil)
 	tr := tar.NewWriter(inputbuf)
 	body := fmt.Sprintf("FROM %s\n", s.Image)
+	body += fmt.Sprintf("COPY %s /usr/local/app\n", s.Path)
 	body += fmt.Sprintf("RUN echo %s step", stepName)
 	body += addCommands(s.Commands)
 	fmt.Println(body)

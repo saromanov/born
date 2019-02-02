@@ -25,7 +25,7 @@ func downloadRepo(link, branch string) (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("unable to unzip repo: %v", err)
 	}
-	return getDownloadedPath("./app")
+	return getDownloadedPath("app")
 }
 
 func getDownloadedPath(path string) (string, error) {
