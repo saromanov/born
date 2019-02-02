@@ -122,12 +122,10 @@ func (b *Build) execuiteStep(client *docker.Client, step string, buildStep Build
 // getBornFile provides getting of the .born.yml file
 // from the repo. repo on format https://github.com/<owner>/<name>
 func (b *Build) getBornFile(repo string) (*structs.Config, error) {
-	res := strings.Split(repo, "/")
-	if len(res) < 2 {
-		return nil, errRepoInvalidFormat
+	owner, repoName, err := parseRepoURL(repo)
+	if err != nil {
+		return nil, err
 	}
-	owner := res[len(res)-2]
-	repoName := res[len(res)-1]
 	resp, err := b.P.GetContent(&structs.GetContentProvider{
 		Owner:    owner,
 		Repo:     repoName,
