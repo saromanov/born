@@ -15,9 +15,13 @@ import (
 func downloadRepo(link string) error {
 	os.MkdirAll("./repo", os.ModePerm)
 	gd := &godownload.GoDownload{
-		Archive: "zip",
+		//Archive: "zip",
 	}
 	gd.Download(link, nil)
+	err := unzip("master", "app")
+	if err != nil {
+		return fmt.Errorf("unable to unzip repo: %v", err)
+	}
 	return nil
 }
 
