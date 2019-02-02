@@ -13,7 +13,6 @@ import (
 
 // downloadRepo provides downloading of the repo
 func downloadRepo(link, branch string) error {
-	os.MkdirAll("./repo", os.ModePerm)
 	gd := &godownload.GoDownload{
 		//Archive: "zip",
 	}
