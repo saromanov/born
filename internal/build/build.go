@@ -80,7 +80,7 @@ func (b *Build) Create() error {
 		return fmt.Errorf("unable to get repo: %v", err)
 	}
 
-	err = downloadRepo(repo.ArchiveURL)
+	err = downloadRepo(repo.ArchiveURL, "master")
 	if err != nil {
 		return fmt.Errorf("unable to download repo: %v", err)
 	}
