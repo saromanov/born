@@ -80,25 +80,30 @@ func (b *Build) Create() error {
 		return err
 	}
 
+	//var wg sync.WaitGroup
 	b.images = make([]string, len(c.Steps))
 	for step, comm := range c.Steps {
 		buildStep, err := parseStep(comm)
 		if err != nil {
 			continue
 		}
-		if buildStep.Parallel {
+		/*if buildStep.Parallel {
+			wg.Add(1)
 			go func(c *docker.Client, s string, bs BuildStep) {
-				b.execuiteStep(c, s, bs)
+				name, err := b.execuiteStep(c, s, bs)
+				if err == nil {
+					b.images = append(b.images, name)
+				}
+				wg.Done()
 			}(client, step, buildStep)
-		} else {
-			name, err := b.execuiteStep(client, step, buildStep)
-			if err != nil {
-				return err
-			}
-			b.images = append(b.images, name)
+		} else {*/
+		name, err := b.execuiteStep(client, step, buildStep)
+		if err != nil {
+			return err
 		}
+		b.images = append(b.images, name)
+		//}
 	}
-
 	defer func(imgs []string) {
 		for i := 0; i < len(imgs); i++ {
 			client.RemoveImage(imgs[i])
@@ -134,7 +139,13 @@ func (b *Build) getBornFile(repo string) (*structs.Config, error) {
 	return parseConfig(resp.Content)
 }
 
-// returns URL for clone repo
-func (b *Build) getCloneURL(repo string) (string, error) {
-	return "", nil
+// parseRepoUrl returns owner and repo name
+func parseRepoURL(repo string) (string, string, error) {
+	res := strings.Split(repo, "/")
+	if len(res) < 2 {
+		return "", "", errRepoInvalidFormat
+	}
+	owner := res[len(res)-2]
+	repoName := res[len(res)-1]
+	return owner, repoName, nil
 }
