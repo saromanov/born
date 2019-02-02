@@ -16,16 +16,16 @@ import (
 var errDirNotFound = errors.New("cloned directory is not found")
 
 // downloadRepo provides downloading of the repo
-func downloadRepo(link, branch string) error {
+func downloadRepo(link, branch string) (string, error) {
 	gd := &godownload.GoDownload{
 		//Archive: "zip",
 	}
 	gd.Download(link, nil)
 	err := unzip(branch, "app")
 	if err != nil {
-		return fmt.Errorf("unable to unzip repo: %v", err)
+		return "", fmt.Errorf("unable to unzip repo: %v", err)
 	}
-	return nil
+	return getDownloadedPath("./app")
 }
 
 func getDownloadedPath(path string) (string, error) {

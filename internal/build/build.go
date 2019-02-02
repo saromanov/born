@@ -80,11 +80,11 @@ func (b *Build) Create() error {
 		return fmt.Errorf("unable to get repo: %v", err)
 	}
 
-	err = downloadRepo(repo.ArchiveURL, "master")
+	path, err := downloadRepo(repo.ArchiveURL, "master")
 	if err != nil {
 		return fmt.Errorf("unable to download repo: %v", err)
 	}
-	fmt.Println("REPO: ", repo.ArchiveURL)
+	fmt.Println("REPO: ", path)
 	client, err := newDockerClient()
 	if err != nil {
 		return err
