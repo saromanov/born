@@ -14,6 +14,16 @@ func parseConfig(data []byte) (*structs.Config, error) {
 	if err != nil {
 		return nil, fmt.Errorf("unable to parse .born.yml: %v", err)
 	}
-
+	if len(c.Steps) > 0 {
+		c.Steps = updateMap(c.Steps)
+	}
 	return c, nil
+}
+
+func updateMap(m map[string]interface{}) map[string]interface{} {
+	result := make(map[string]interface{})
+	for k, v := range m {
+		result[k] = v
+	}
+	return result
 }
