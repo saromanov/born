@@ -92,6 +92,7 @@ func (b *Build) Create() error {
 	}
 
 	//var wg sync.WaitGroup
+	fmt.Println("STEPS: ", c.Steps)
 	b.images = make([]string, len(c.Steps))
 	for step, comm := range c.Steps {
 		buildStep, err := parseStep(comm)
@@ -129,7 +130,16 @@ func (b *Build) Create() error {
 // executeStep provides executing of the build step
 func (b *Build) execuiteStep(client *docker.Client, step string, buildStep BuildStep) (string, error) {
 	image := newImage(client)
-	return image.createImage("1", step, buildStep)
+	containerID, err := image.createImage("1", step, buildStep)
+	if err != nil {
+		return "", err
+	}
+	newContainer := newContainer(containerID, client)
+	err = newContainer.startContainer()
+	if err != nil {
+		return "", fmt.Errorf("unable to start container: %v", err)
+	}
+	return containerID, nil
 }
 
 // getBornFile provides getting of the .born.yml file
