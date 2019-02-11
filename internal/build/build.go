@@ -97,7 +97,7 @@ func (b *Build) Create() error {
 		buildStep, err := parseStep(comm)
 		if err != nil {
 			fmt.Println("ERR: ", err)
-			continue
+			return err
 		}
 		buildStep.Path = "./" + path
 		/*if buildStep.Parallel {
