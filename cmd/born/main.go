@@ -16,7 +16,10 @@ import (
 	"golang.org/x/oauth2"
 )
 
-var errDBCredsIsNotDefined = errors.New("db: username and password is not defined")
+var (
+	errDBCredsIsNotDefined = errors.New("db: username and password is not defined")
+	errNoGithubToken = errors.New("github token is not defined")
+)
 
 var flags = []cli.Flag{
 	cli.StringFlag{
@@ -45,6 +48,9 @@ var flags = []cli.Flag{
 // at this moment, its support only Github
 func setupProvider(c *cli.Context) (provider.Provider, error) {
 	token := c.String("github-token")
+	if token == "" {
+		return nil, errNoGithubToken
+	}
 	ctx := context.Background()
 	sts := oauth2.StaticTokenSource(
 		&oauth2.Token{AccessToken: token},
