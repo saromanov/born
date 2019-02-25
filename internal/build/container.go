@@ -1,6 +1,10 @@
 package build
 
-import "github.com/fsouza/go-dockerclient"
+import (
+	"fmt"
+
+	"github.com/fsouza/go-dockerclient"
+)
 
 // container provides handling of docker containers
 type container struct {
@@ -21,13 +25,13 @@ func (c *container) startContainer() error {
 	cont, err := c.client.CreateContainer(docker.CreateContainerOptions{
 		Name: c.name,
 		Config: &docker.Config{
-			Image: "golang:latest",
+			Hostname: "app",
 		},
 	})
 	if err != nil {
 		return err
 	}
-
+	fmt.Println("ID: ", cont.ID)
 	err = c.client.StartContainer(cont.ID, &docker.HostConfig{})
 	if err != nil {
 		return err
