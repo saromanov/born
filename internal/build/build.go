@@ -101,16 +101,6 @@ func (b *Build) Create() error {
 			return err
 		}
 		buildStep.Path = "./" + path
-		/*if buildStep.Parallel {
-			wg.Add(1)
-			go func(c *docker.Client, s string, bs BuildStep) {
-				name, err := b.execuiteStep(c, s, bs)
-				if err == nil {
-					b.images = append(b.images, name)
-				}
-				wg.Done()
-			}(client, step, buildStep)
-		} else {*/
 		name, err := b.execuiteStep(client, step, buildStep)
 		if err != nil {
 			return err
