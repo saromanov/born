@@ -26,6 +26,7 @@ func (c *container) startContainer() error {
 		Name: c.name,
 		Config: &docker.Config{
 			Hostname: "app",
+			Image:    c.name,
 		},
 	})
 	if err != nil {
