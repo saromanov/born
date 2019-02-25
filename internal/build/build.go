@@ -5,6 +5,7 @@ package build
 import (
 	"errors"
 	"fmt"
+	"os"
 	"strings"
 	"sync"
 
@@ -91,7 +92,6 @@ func (b *Build) Create() error {
 		return err
 	}
 
-	//var wg sync.WaitGroup
 	fmt.Println("STEPS: ", c.Steps)
 	b.images = make([]string, len(c.Steps))
 	for step, comm := range c.Steps {
@@ -106,12 +106,13 @@ func (b *Build) Create() error {
 			return err
 		}
 		b.images = append(b.images, name)
-		//}
 	}
 	defer func(imgs []string) {
 		for i := 0; i < len(imgs); i++ {
 			client.RemoveImage(imgs[i])
 		}
+
+		os.Remove("master") // nolint
 	}(b.images)
 
 	return nil
