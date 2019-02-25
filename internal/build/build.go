@@ -126,11 +126,11 @@ func (b *Build) execuiteStep(client *docker.Client, step string, buildStep Build
 		return "", err
 	}
 	newContainer := newContainer(containerID, client)
-	err = newContainer.startContainer()
+	ID, err := newContainer.startContainer()
 	if err != nil {
 		return "", fmt.Errorf("unable to start container: %v", err)
 	}
-	return containerID, nil
+	return ID, nil
 }
 
 // getBornFile provides getting of the .born.yml file

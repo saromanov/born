@@ -21,7 +21,7 @@ func newContainer(name string, c *docker.Client) *container {
 }
 
 // startContainer provides starting of container
-func (c *container) startContainer() error {
+func (c *container) startContainer() (string, error) {
 	cont, err := c.client.CreateContainer(docker.CreateContainerOptions{
 		Name: c.name,
 		Config: &docker.Config{
@@ -30,13 +30,13 @@ func (c *container) startContainer() error {
 		},
 	})
 	if err != nil {
-		return err
+		return "", err
 	}
 	fmt.Println("ID: ", cont.ID)
 	err = c.client.StartContainer(cont.ID, &docker.HostConfig{})
 	if err != nil {
-		return err
+		return "", err
 	}
 
-	return nil
+	return cont.ID, nil
 }
