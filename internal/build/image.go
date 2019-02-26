@@ -51,6 +51,7 @@ func (a *image) createImage(userID, stepName string, s BuildStep) (string, error
 	//body += fmt.Sprintf("ADD //home/motorcode/.zprofile main.go\n")
 	body += fmt.Sprintf("ADD * /usr/local/app\n")
 	body += fmt.Sprintf("RUN echo %s step", stepName)
+	body += fmt.Sprintf("RUN sleep 10")
 	body += addCommands(s.Commands)
 	bodyBytes := []byte(body)
 	tr.WriteHeader(&tar.Header{
@@ -62,7 +63,7 @@ func (a *image) createImage(userID, stepName string, s BuildStep) (string, error
 	})
 	tr.Write(bodyBytes)
 	tr.Close()
-	cointainerName := fmt.Sprintf("%s_%s_prod", userID, randomString(imageNameLength))
+	cointainerName := fmt.Sprintf("%s_%s_build", userID, randomString(imageNameLength))
 	opts := docker.BuildImageOptions{
 		Name:         cointainerName,
 		InputStream:  inputbuf,
