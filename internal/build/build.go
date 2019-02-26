@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 	"sync"
 
@@ -173,4 +174,24 @@ func parseRepoURL(repo string) (string, string, error) {
 	owner := res[len(res)-2]
 	repoName := res[len(res)-1]
 	return owner, repoName, nil
+}
+
+// removeDirContent provides removing of content from directory
+func removeDirContent(dir string) error {
+	d, err := os.Open(dir)
+	if err != nil {
+		return err
+	}
+	defer d.Close()
+	names, err := d.Readdirnames(-1)
+	if err != nil {
+		return err
+	}
+	for _, name := range names {
+		err = os.RemoveAll(filepath.Join(dir, name))
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }
