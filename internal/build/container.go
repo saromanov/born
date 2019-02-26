@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/fsouza/go-dockerclient"
+	"github.com/pkg/errors"
 )
 
 // container provides handling of docker containers
@@ -30,19 +31,19 @@ func (c *container) startContainer() (string, error) {
 		},
 	})
 	if err != nil {
-		return "", err
+		return "", errors.Wrap(err, "unable to start container")
 	}
 	fmt.Println("ID: ", cont.ID)
 	err = c.client.StartContainer(cont.ID, &docker.HostConfig{})
 	if err != nil {
-		return "", err
+		return "", errors.Wrap(err, "unable to start container")
 	}
 
 	err = c.client.RemoveContainer(docker.RemoveContainerOptions{
 		ID: cont.ID,
 	})
 	if err != nil {
-		return "", fmt.Errorf("unable to remove container: %v", err)
+		return "", errors.Wrap(err, "unable to remove container")
 	}
 
 	return cont.ID, nil
