@@ -38,5 +38,12 @@ func (c *container) startContainer() (string, error) {
 		return "", err
 	}
 
+	err = c.client.RemoveContainer(docker.RemoveContainerOptions{
+		ID: cont.ID,
+	})
+	if err != nil {
+		return "", fmt.Errorf("unable to remove container: %v", err)
+	}
+
 	return cont.ID, nil
 }
