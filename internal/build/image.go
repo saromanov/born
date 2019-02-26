@@ -62,7 +62,7 @@ func (a *image) createImage(userID, stepName string, s BuildStep) (string, error
 	})
 	tr.Write(bodyBytes)
 	tr.Close()
-	cointainerName := fmt.Sprintf("%s_%s", userID, randomString(imageNameLength))
+	cointainerName := fmt.Sprintf("%s_%s_prod", userID, randomString(imageNameLength))
 	opts := docker.BuildImageOptions{
 		Name:         cointainerName,
 		InputStream:  inputbuf,

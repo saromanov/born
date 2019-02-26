@@ -39,12 +39,17 @@ func (c *container) startContainer() (string, error) {
 		return "", errors.Wrap(err, "unable to start container")
 	}
 
-	err = c.client.RemoveContainer(docker.RemoveContainerOptions{
-		ID: cont.ID,
+	return cont.ID, nil
+}
+
+// removeContainer provides removing of exist container
+func (c *container) removeContainer(id string) error {
+	err := c.client.RemoveContainer(docker.RemoveContainerOptions{
+		ID: id,
 	})
 	if err != nil {
-		return "", errors.Wrap(err, "unable to remove container")
+		return errors.Wrap(err, "unable to remove container")
 	}
-
-	return cont.ID, nil
+	fmt.Printf("container with ID %s was removed", id)
+	return nil
 }
