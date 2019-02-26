@@ -113,7 +113,8 @@ func (b *Build) Create() error {
 			client.RemoveImage(imgs[i])
 		}
 
-		os.Remove("master") // nolint
+		os.Remove("master")     // nolint
+		removeDirContent("app") //nolint
 	}(b.images)
 
 	return nil
